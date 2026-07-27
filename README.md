@@ -12,7 +12,7 @@ SelfAuditBench combines:
 
 ## Architecture
 
-[View the SelfAuditBench architecture figure](Figures/SAB_architecture.pdf).
+[![SelfAuditBench architecture: reproductions, dataset preparation, annotation and adjudication, framework design, evaluation runs, and expected outcomes](Figures/SAB_architecture.png)](Figures/SAB_architecture.pdf)
 
 The workflow begins with local reproductions of Agent Security Bench (ASB), ConVerse, and AgentForesight AFTraj. Their trajectories are normalized into a shared schema, annotated independently by two researchers, adjudicated by a third researcher, and evaluated through either recorded replay or enacted recovery. The broker accepts only monotonic authority reductions, gates fresh proposals, and returns authoritative decisions and receipts to the actor.
 
@@ -92,7 +92,7 @@ DeepSeek V4 Flash uses the official DeepSeek API. Qwen3.5 and MiniMax M2.7 use C
 
 DeepSeek and Qwen match on ASB, while DeepSeek detects 34.15 percentage points more risky ConVerse trajectories than Qwen in the paired comparison. MiniMax and Gemma expose additional provider/schema reliability variation.
 
-[View four-backend audit performance](Figures/backend_audit_performance.pdf).
+[![Recorded audit performance across DeepSeek V4 Flash, Qwen3.5, MiniMax M2.7, and Gemma4 12B](Figures/backend_audit_performance.png)](Figures/backend_audit_performance.pdf)
 
 ### Enacted closed-loop recovery
 
@@ -107,13 +107,13 @@ Both audit placements expose the shared actor in all 48 scenarios on each surfac
 
 Inline improves ASB task success while maintaining similar safety. On ConVerse, the sidecar improves safety by 29.17 points and risky harm avoidance by 34.15 points at equal task success, showing that audit placement interacts with surface semantics.
 
-[View enforcement and action-gate outcomes](Figures/enforcement_assurance.pdf).
+[![Closed-loop enforcement assurance across ASB and ConVerse](Figures/enforcement_assurance.png)](Figures/enforcement_assurance.pdf)
 
 ### AFTraj prefix localization
 
 AFTraj remains a separate decisive-error localization and reliability diagnostic. The native DeepSeek reproduction processes 326/332 trajectories with 30.94% Exact-F1, 2.77 absolute step shift, 31.36% false alarms, and 34.36% step accuracy. The SelfAuditBench sidecar processes all 332 trajectories and 3,821 prefixes but reaches 3.41% Exact-F1, 0% false alarms, and 1.84% step accuracy. This separation demonstrates that reliable contract execution does not by itself establish valid prefix localization.
 
-[View AFTraj prefix diagnostics](Figures/afttraj_prefix_diagnostics.pdf).
+[![AFTraj prefix-localization diagnostics](Figures/afttraj_prefix_diagnostics.png)](Figures/afttraj_prefix_diagnostics.pdf)
 
 ## Released artifacts
 
