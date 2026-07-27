@@ -27,7 +27,7 @@ The workflow begins with local reproductions of Agent Security Bench (ASB), ConV
 | [`Reproductions`](Reproductions) | Local ASB, ConVerse, and AgentForesight reproduction snapshots |
 | [`Runbooks`](Runbooks) | Complete reproducibility commands and admission checks |
 | [`Figures`](Figures) | Architecture and result figures |
-| [`annotation_guide.md`](annotation_guide.md) | Annotation and adjudication protocol |
+| [`Runbooks/annotation_guide.md`](Runbooks/annotation_guide.md) | Annotation and adjudication protocol |
 
 ## Reproduction workflow
 
@@ -75,7 +75,7 @@ The ASB and ConVerse study contains 48 matched attack-control pairs: 24 pairs pe
 | Accepted-intervention Jaccard | 0.9100 |
 | Unresolved items | 0 |
 
-See [`annotation_guide.md`](annotation_guide.md) for label semantics, chronology rules, file distribution, independent annotation, freezing, and adjudication.
+See [`Runbooks/annotation_guide.md`](Runbooks/annotation_guide.md) for label semantics, chronology rules, file distribution, independent annotation, freezing, and adjudication.
 
 ## Core results
 

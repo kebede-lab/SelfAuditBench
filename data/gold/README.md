@@ -21,4 +21,4 @@ selfauditbench annotate verify-compact data/gold/selfauditbench-gold-asb.integri
 selfauditbench annotate verify-compact data/gold/selfauditbench-gold-converse.integrity.json
 ```
 
-See [`../../annotation_guide.md`](../../annotation_guide.md) for label semantics and study procedure. Complete construction, validation, replay, and closed-loop commands are in [`../../Runbooks`](../../Runbooks).
+See [`../../Runbooks/annotation_guide.md`](../../Runbooks/annotation_guide.md) for label semantics and study procedure. Complete construction, validation, replay, and closed-loop commands are in [`../../Runbooks`](../../Runbooks).
