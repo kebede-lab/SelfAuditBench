@@ -52,6 +52,12 @@ WIDE_LEGEND_SIZE = 13.0
 WIDE_ANNOTATION_SIZE = 12.5
 
 BACKENDS = ["DeepSeek", "Qwen3.5", "MiniMax", "Gemma 4"]
+BACKEND_DISPLAY_NAMES = {
+    "DeepSeek": "DeepSeek V4",
+    "Qwen3.5": "Qwen3.5",
+    "MiniMax": "MiniMax2.7",
+    "Gemma 4": "Gemma 4",
+}
 BACKEND_COLORS = {
     "DeepSeek": "#2F7D78",
     "Qwen3.5": "#586FA7",
@@ -441,7 +447,7 @@ def draw_backend_heading(ax: plt.Axes, repo: Path, letter: str, backend: str) ->
     ax.text(
         0.2,
         1.09,
-        f"({letter})  {backend}",
+        f"({letter})  {BACKEND_DISPLAY_NAMES[backend]}",
         transform=ax.transAxes,
         ha="left",
         va="center",
@@ -967,9 +973,10 @@ def figure_comparisons(repo: Path, output: Path) -> Path:
     for ax, surface, letter in zip(axes, ("asb", "converse"), "ab", strict=True):
         matrix = matrices[surface]
         image = ax.imshow(matrix, cmap=DIFF_CMAP, norm=norm, aspect="equal")
-        ax.set_xticks(np.arange(4), BACKENDS, rotation=28, ha="right")
+        backend_labels = [BACKEND_DISPLAY_NAMES[backend] for backend in BACKENDS]
+        ax.set_xticks(np.arange(4), backend_labels, rotation=28, ha="right")
         if ax is axes[0]:
-            ax.set_yticks(np.arange(4), BACKENDS)
+            ax.set_yticks(np.arange(4), backend_labels)
         else:
             ax.set_yticks(np.arange(4), [])
         ax.tick_params(length=0, labelsize=PAIR_TICK_SIZE)
@@ -1071,7 +1078,7 @@ def figure_progress(repo: Path, output: Path) -> Path:
                 marker=marker,
                 markevery=20,
                 markersize=6.5,
-                label=backend,
+                label=BACKEND_DISPLAY_NAMES[backend],
             )
             if ax is axes[0]:
                 legend_handles.append(
@@ -1083,7 +1090,7 @@ def figure_progress(repo: Path, output: Path) -> Path:
                         markerfacecolor=BACKEND_COLORS[backend],
                         markeredgecolor=BACKEND_COLORS[backend],
                         markersize=9.0,
-                        label=backend,
+                        label=BACKEND_DISPLAY_NAMES[backend],
                     )
                 )
         ax.axvline(0, color=INK, linewidth=1.1, linestyle=(0, (3, 3)))
