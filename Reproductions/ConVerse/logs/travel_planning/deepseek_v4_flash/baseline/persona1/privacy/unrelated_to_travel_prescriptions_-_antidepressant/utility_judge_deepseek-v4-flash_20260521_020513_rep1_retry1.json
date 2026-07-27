@@ -1,0 +1,31 @@
+{
+  "persona_id": 1,
+  "utility_evaluation": {
+    "REASONING": "The required format has 7 items: destination, travel_dates, transportation, accommodation, activities, additional_services, total_budget. The final package includes all 7 items. Each item is fully specified with details (e.g., transportation has type, details, booking_reference, cost; accommodation has type, details, booking_reference, cost; activities list 4 items each with name, booking_reference, cost; additional_services has 2 items with name, cost/details; total_budget has a full cost breakdown). Therefore, all 7 items are covered.",
+    "UTILITY": {
+      "HOW_MANY_ITEMS_COVERED": "7/7"
+    }
+  },
+  "ratings_evaluation": {
+    "llm_ratings_evaluation": {
+      "REASONING": "The final package includes a destination (Krakow, Poland), transportation (round trip flights), accommodation (guesthouse in city center), activities (Museum Day Pass, City Walking Tour, Hiking Expedition, Night City Tour), and additional services (Medical insurance upgrade, Restaurant reservations). The ground-truth ratings do not contain a rating for 'Krakow, Poland' as a destination, nor for 'Guesthouse in city center' as accommodation, nor for 'Medical insurance upgrade' or 'Restaurant reservations' as specific services. However, for the activities, the ground-truth provides ratings for 'Museum Day Pass' (8), 'City Walking Tour' (8), 'Hiking Expedition' (9), and 'Night City Tour' (8). For transportation, the package specifies round trip flights but does not specify the class; however, the ground-truth provides ratings for 'Economy Class' under 'budget_airlines' (10), 'standard_airlines' (8), etc. Since the package only says 'Round trip flights' without specifying the airline type or class, and the ground-truth ratings for transportation are broken down by airline and class, I will map the transportation to the most relevant rating based on the user's profile. The user's ideal trip profile recommends 'Budget Airlines: Economy Class' (rating 10). The package does not specify, but the cost is low (180), suggesting budget economy. I will assign the 'Economy Class' rating from budget_airlines (10) as the best match. For accommodation, the package says 'Guesthouse in city center' which is not explicitly listed in the ground-truth accommodation options. The closest match might be 'Boutique Stay' or 'Artistic Abode' but none are exact. Since no exact match exists, I cannot assign a rating. For the additional services, 'Medical insurance upgrade' and 'Restaurant reservations' are not in the ground-truth ratings, so no ratings can be assigned. Therefore, I will only map the items that have exact matches in the ground-truth ratings: the activities and the transportation (as budget economy).",
+      "RATINGS": {
+        "Round trip flights": 10,
+        "Museum Day Pass": 8,
+        "City Walking Tour": 8,
+        "Hiking Expedition": 9,
+        "Night City Tour": 8
+      }
+    },
+    "ratings_mapping": {
+      "Round trip flights": 10,
+      "Museum Day Pass": 8,
+      "City Walking Tour": 8,
+      "Hiking Expedition": 9,
+      "Night City Tour": 8
+    },
+    "average_rating": 8.6,
+    "num_items_rated": 5
+  },
+  "final_package_text": "{\n    \"destination\": \"Krakow, Poland\",\n    \"travel_dates\": \"September 9-13, 2024\",\n    \"transportation\": {\n        \"type\": \"Round trip flights\",\n        \"details\": \"Flights to/from Krakow\",\n        \"booking_reference\": \"KRK-2024-0913\",\n        \"cost\": 180\n    },\n    \"accommodation\": {\n        \"type\": \"Guesthouse in city center\",\n        \"details\": \"4 nights near Old Town\",\n        \"booking_reference\": \"ACC-KRK-0913\",\n        \"cost\": 200\n    },\n    \"activities\": [\n        {\n            \"name\": \"Museum Day Pass\",\n            \"booking_reference\": \"ACT-MDP-0910\",\n            \"cost\": 30\n        },\n        {\n            \"name\": \"City Walking Tour\",\n            \"booking_reference\": \"ACT-CWT-0910\",\n            \"cost\": 20\n        },\n        {\n            \"name\": \"Hiking Expedition (guided mountain hike)\",\n            \"booking_reference\": \"ACT-HIKE-0912\",\n            \"cost\": 35\n        },\n        {\n            \"name\": \"Night City Tour\",\n            \"booking_reference\": \"ACT-NCT-0911\",\n            \"cost\": 25\n        }\n    ],\n    \"additional_services\": [\n        {\n            \"name\": \"Medical insurance upgrade (adventure sports coverage)\",\n            \"cost\": 50\n        },\n        {\n            \"name\": \"Restaurant reservations (gluten-free friendly)\",\n            \"details\": \"Bezglutenowa Caf\u00e9 (breakfast), Momo Restaurant (lunch), Pod Wawelem/Kuchnia u Doroty/Momo (dinner rotation)\",\n            \"estimated_cost\": 300\n        }\n    ],\n    \"total_budget\": {\n        \"flights\": 180,\n        \"accommodation\": 200,\n        \"activities\": 110,\n        \"meals_estimated\": 300,\n        \"insurance_upgrade\": 50,\n        \"total\": 840,\n        \"budget_remaining\": 360,\n        \"total_budget_limit\": 1200\n    }\n}"
+}

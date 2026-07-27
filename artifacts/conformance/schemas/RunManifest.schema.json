@@ -1,0 +1,330 @@
+{
+  "$defs": {
+    "AuditEmissionMode": {
+      "enum": [
+        "none",
+        "sidecar",
+        "inline",
+        "external"
+      ],
+      "title": "AuditEmissionMode",
+      "type": "string"
+    },
+    "ClosedLoopCondition": {
+      "enum": [
+        "sidecar_recovery",
+        "inline_self_restriction"
+      ],
+      "title": "ClosedLoopCondition",
+      "type": "string"
+    },
+    "ModelProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "api_key_env": {
+          "default": "OPENAI_API_KEY",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "title": "Api Key Env",
+          "type": "string"
+        },
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Url"
+        },
+        "concise_rationale_words": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 80,
+          "title": "Concise Rationale Words"
+        },
+        "input_cost_per_million_tokens_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Cost Per Million Tokens Usd"
+        },
+        "max_retries": {
+          "default": 2,
+          "minimum": 0,
+          "title": "Max Retries",
+          "type": "integer"
+        },
+        "max_tokens": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 900,
+          "title": "Max Tokens"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "output_cost_per_million_tokens_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Cost Per Million Tokens Usd"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "temperature": {
+          "anyOf": [
+            {
+              "maximum": 2,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0.0,
+          "title": "Temperature"
+        },
+        "thinking_mode": {
+          "default": "default",
+          "enum": [
+            "default",
+            "disabled",
+            "enabled"
+          ],
+          "title": "Thinking Mode",
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "default": 60.0,
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "provider",
+        "model"
+      ],
+      "title": "ModelProfile",
+      "type": "object"
+    },
+    "StrategyId": {
+      "enum": [
+        "no_audit",
+        "self_audit_log_only",
+        "external_auditor",
+        "pretool_guardrail",
+        "fixed_policy",
+        "self_audit_broker",
+        "combined_monitor_broker"
+      ],
+      "title": "StrategyId",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit_mode": {
+      "$ref": "#/$defs/AuditEmissionMode"
+    },
+    "closed_loop_condition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ClosedLoopCondition"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "comparison_contract_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Comparison Contract Hash"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completed At"
+    },
+    "config_hash": {
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "dataset_hash": {
+      "title": "Dataset Hash",
+      "type": "string"
+    },
+    "environment": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Environment",
+      "type": "object"
+    },
+    "evaluation_contract_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evaluation Contract Hash"
+    },
+    "execution_semantics": {
+      "default": "full_trace_counterfactual_with_terminal_projection",
+      "enum": [
+        "full_trace_counterfactual_with_terminal_projection",
+        "enacted_live_mediation",
+        "enacted_closed_loop_recovery",
+        "imported_observer_result"
+      ],
+      "title": "Execution Semantics",
+      "type": "string"
+    },
+    "model_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observer_model_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "outcome_judge_model_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "random_seed": {
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "recovery_model_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "strategy": {
+      "$ref": "#/$defs/StrategyId"
+    },
+    "treatment": {
+      "additionalProperties": true,
+      "title": "Treatment",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run_id",
+    "strategy",
+    "audit_mode",
+    "config_hash",
+    "dataset_hash",
+    "random_seed",
+    "started_at"
+  ],
+  "title": "RunManifest",
+  "type": "object"
+}

@@ -1,0 +1,135 @@
+{
+  "$defs": {
+    "CapabilityGrant": {
+      "additionalProperties": false,
+      "description": "One namespaced permission and its mechanically comparable bounds.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.:/-]+$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "fields": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "max_sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "operations": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
+        "remaining_calls": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Calls"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "resources": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "CapabilityGrant",
+      "type": "object"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A proposed monotonic permission reduction.",
+  "properties": {
+    "disclosure_ceiling": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Sensitivity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "narrow": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CapabilityGrant"
+      },
+      "title": "Narrow",
+      "type": "object"
+    },
+    "quarantine_sources": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Quarantine Sources",
+      "type": "array"
+    },
+    "remove": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Remove",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "title": "PermissionDelta",
+  "type": "object"
+}

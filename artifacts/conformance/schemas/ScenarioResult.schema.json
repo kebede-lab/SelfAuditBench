@@ -1,0 +1,714 @@
+{
+  "$defs": {
+    "AuditEmissionMode": {
+      "enum": [
+        "none",
+        "sidecar",
+        "inline",
+        "external"
+      ],
+      "title": "AuditEmissionMode",
+      "type": "string"
+    },
+    "AuditRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/Checkpoint"
+        },
+        "confidence": {
+          "description": "Probability that observable risk requiring intervention is present.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "emission_mode": {
+          "$ref": "#/$defs/AuditEmissionMode"
+        },
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "intended_action_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Intended Action Ref"
+        },
+        "intervention": {
+          "$ref": "#/$defs/Intervention"
+        },
+        "permission_delta": {
+          "$ref": "#/$defs/PermissionDelta"
+        },
+        "rationale": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "raw_response_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response Ref"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/RiskLevel"
+        },
+        "risk_types": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RiskType"
+          },
+          "title": "Risk Types",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "checkpoint",
+        "actor_id",
+        "risk_level",
+        "confidence",
+        "intervention",
+        "rationale",
+        "emission_mode"
+      ],
+      "title": "AuditRecord",
+      "type": "object"
+    },
+    "BrokerDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "applied_delta": {
+          "$ref": "#/$defs/PermissionDelta"
+        },
+        "decision_source": {
+          "$ref": "#/$defs/DecisionSource",
+          "default": "allow"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "outcome": {
+          "$ref": "#/$defs/BrokerOutcome"
+        },
+        "permission_after": {
+          "$ref": "#/$defs/PermissionState"
+        },
+        "permission_before": {
+          "$ref": "#/$defs/PermissionState"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "requested_delta": {
+          "$ref": "#/$defs/PermissionDelta"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "violations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Violations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "event_id",
+        "outcome",
+        "reason",
+        "permission_before",
+        "permission_after"
+      ],
+      "title": "BrokerDecision",
+      "type": "object"
+    },
+    "BrokerOutcome": {
+      "enum": [
+        "allow",
+        "block_and_replan",
+        "pause",
+        "refuse"
+      ],
+      "title": "BrokerOutcome",
+      "type": "string"
+    },
+    "CapabilityGrant": {
+      "additionalProperties": false,
+      "description": "One namespaced permission and its mechanically comparable bounds.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.:/-]+$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "fields": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "max_sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "operations": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
+        "remaining_calls": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Calls"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "resources": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "CapabilityGrant",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "enum": [
+        "pre_plan",
+        "post_memory",
+        "post_observation",
+        "post_message",
+        "pre_environment_query",
+        "pre_disclosure",
+        "pre_tool",
+        "pre_commit",
+        "pre_memory_write"
+      ],
+      "title": "Checkpoint",
+      "type": "string"
+    },
+    "ClosedLoopCondition": {
+      "enum": [
+        "sidecar_recovery",
+        "inline_self_restriction"
+      ],
+      "title": "ClosedLoopCondition",
+      "type": "string"
+    },
+    "ClosedLoopTerminalReason": {
+      "enum": [
+        "recorded_trace_complete",
+        "actor_completed",
+        "actor_refused",
+        "broker_paused",
+        "broker_refused",
+        "replan_budget_exhausted",
+        "step_budget_exhausted",
+        "actor_stalled",
+        "actor_error",
+        "judge_error"
+      ],
+      "title": "ClosedLoopTerminalReason",
+      "type": "string"
+    },
+    "DecisionSource": {
+      "description": "Controller-assigned cause of a broker decision.",
+      "enum": [
+        "allow",
+        "audit_intervention",
+        "schema_guard",
+        "permission_policy",
+        "monotonicity_rejection",
+        "monitor_only"
+      ],
+      "title": "DecisionSource",
+      "type": "string"
+    },
+    "FailureType": {
+      "enum": [
+        "authentication_error",
+        "provider_503",
+        "timeout",
+        "empty_response",
+        "json_parse_error",
+        "enum_validation_error",
+        "permission_delta_error",
+        "schema_validation_error",
+        "unexpected_exception"
+      ],
+      "title": "FailureType",
+      "type": "string"
+    },
+    "Intervention": {
+      "enum": [
+        "continue",
+        "sanitize",
+        "reverify",
+        "ask_user",
+        "downgrade",
+        "quarantine",
+        "pause",
+        "refuse"
+      ],
+      "title": "Intervention",
+      "type": "string"
+    },
+    "PermissionDelta": {
+      "additionalProperties": false,
+      "description": "A proposed monotonic permission reduction.",
+      "properties": {
+        "disclosure_ceiling": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Sensitivity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "narrow": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Narrow",
+          "type": "object"
+        },
+        "quarantine_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantine Sources",
+          "type": "array"
+        },
+        "remove": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Remove",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionDelta",
+      "type": "object"
+    },
+    "PermissionState": {
+      "additionalProperties": false,
+      "description": "Current enforceable permissions for one task execution.",
+      "properties": {
+        "disclosure_ceiling": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "grants": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Grants",
+          "type": "object"
+        },
+        "quarantined_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantined Sources",
+          "type": "array"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionState",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "RiskType": {
+      "enum": [
+        "privacy",
+        "prompt_injection",
+        "memory_poisoning",
+        "overprivilege",
+        "external_pressure",
+        "stale_state",
+        "irreversible_action",
+        "policy_conflict",
+        "unknown"
+      ],
+      "title": "RiskType",
+      "type": "string"
+    },
+    "RunStatus": {
+      "enum": [
+        "complete",
+        "timeout",
+        "schema_error",
+        "adapter_error",
+        "broker_error",
+        "actor_error",
+        "judge_error"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit_event_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Audit Event Ids",
+      "type": "array"
+    },
+    "audit_opportunities": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Audit Opportunities",
+      "type": "integer"
+    },
+    "audits": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AuditRecord"
+      },
+      "title": "Audits",
+      "type": "array"
+    },
+    "closed_loop_condition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ClosedLoopCondition"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "closed_loop_terminal_reason": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ClosedLoopTerminalReason"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "decisions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/BrokerDecision"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "denied_action_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Denied Action Count",
+      "type": "integer"
+    },
+    "error_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Message"
+    },
+    "executed_action_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Executed Action Count",
+      "type": "integer"
+    },
+    "failure_type": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FailureType"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "first_non_allow_event_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "First Non Allow Event Id"
+    },
+    "fixed_trace_harm_transition_allowed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fixed Trace Harm Transition Allowed"
+    },
+    "harm_occurred": {
+      "default": false,
+      "title": "Harm Occurred",
+      "type": "boolean"
+    },
+    "judge_covered": {
+      "default": false,
+      "title": "Judge Covered",
+      "type": "boolean"
+    },
+    "outcome_judge_covered": {
+      "default": false,
+      "title": "Outcome Judge Covered",
+      "type": "boolean"
+    },
+    "post_intervention_violation_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Post Intervention Violation Count",
+      "type": "integer"
+    },
+    "recovered": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recovered"
+    },
+    "recovery_attempted": {
+      "default": false,
+      "title": "Recovery Attempted",
+      "type": "boolean"
+    },
+    "recovery_steps": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Recovery Steps",
+      "type": "integer"
+    },
+    "repeated_denied_action_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Repeated Denied Action Count",
+      "type": "integer"
+    },
+    "replan_attempts": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Replan Attempts",
+      "type": "integer"
+    },
+    "safe_task_success": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Safe Task Success"
+    },
+    "safety_satisfied": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Safety Satisfied"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/RunStatus"
+    },
+    "task_success": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Success"
+    },
+    "terminal_projection_harm_occurred": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Terminal Projection Harm Occurred"
+    },
+    "utility_score": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Utility Score"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "status"
+  ],
+  "title": "ScenarioResult",
+  "type": "object"
+}

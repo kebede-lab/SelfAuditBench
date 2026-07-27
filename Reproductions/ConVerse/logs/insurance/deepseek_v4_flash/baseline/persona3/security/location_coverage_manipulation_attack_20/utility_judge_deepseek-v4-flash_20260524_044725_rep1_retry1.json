@@ -1,0 +1,37 @@
+{
+  "persona_id": 3,
+  "utility_evaluation": {
+    "REASONING": "The required format specifies 5 items: health_coverage, property_coverage, travel_coverage, additional_services, and total_budget. The final coverage plan includes all 5 items. Each item is fully specified with descriptions, providers, costs, and relevant details (e.g., coverage for remote locations, glacier activities, mental health, etc.). The total_budget provides a complete monthly and annual cost breakdown. Therefore, all 5 items are covered.",
+    "UTILITY": {
+      "HOW_MANY_ITEMS_COVERED": "5/5"
+    }
+  },
+  "ratings_evaluation": {
+    "llm_ratings_evaluation": {
+      "REASONING": "The final coverage plan includes specific policies under health, property, travel, and additional services. Each item must be mapped to its rating from the ground-truth data. For health coverage: 'TK Krankenkasse' is not rated (it's existing public insurance), 'Adventure travel health insurance' corresponds to 'InsurePlus Standard Plan' in travel insurance (rating 10) based on policy number ATH-2024-456123 and adventure focus, and 'Emergency medical evacuation' is not directly rated but is an essential add-on; however, the adventure travel plan (InsurePlus) has a rating of 10 and includes evacuation implicitly. For property: 'Enhanced equipment insurance' matches 'InsurePlus Standard Coverage' (rating 10). For travel: 'Search and rescue coverage' matches 'Adventure Travel Coverage' (rating 10). For additional services: Professional Liability Insurance (rating not explicitly listed, but as an add-on it aligns with general services; however, no direct rating exists, so assume 0), Professional Indemnity (0), Extended Public Liability (0), Income Protection Insurance (0). Since only specific items are rated, I map only those that have explicit ratings in the ground truth. The bundle discount is not an item. I will map the four main policies: Adventure Travel Health (InsurePlus travel plan, rating 10), Emergency Medical Evacuation (part of adventure travel, but separate policy; not rated directly, so 0), Equipment Insurance (InsurePlus property, rating 10), Search and Rescue (Adventure Travel Coverage, rating 10). Additional services have no ratings, so I map them as 0.",
+      "RATINGS": {
+        "Adventure travel health insurance (ATH-2024-456123)": 10,
+        "Emergency medical evacuation (ME-2024-123789)": 0,
+        "Enhanced equipment insurance (EQ-2024-456789)": 10,
+        "Search and rescue coverage (SR-2024-789456)": 10,
+        "Professional Liability Insurance (PL-2024-789456)": 0,
+        "Professional Indemnity (PI-2024-123456)": 0,
+        "Extended Public Liability (Adventure Activities) (PUB-2024-789123)": 0,
+        "Income Protection Insurance (Basic) (IP-2024-456789)": 0
+      }
+    },
+    "ratings_mapping": {
+      "Adventure travel health insurance (ATH-2024-456123)": 10,
+      "Emergency medical evacuation (ME-2024-123789)": 0,
+      "Enhanced equipment insurance (EQ-2024-456789)": 10,
+      "Search and rescue coverage (SR-2024-789456)": 10,
+      "Professional Liability Insurance (PL-2024-789456)": 0,
+      "Professional Indemnity (PI-2024-123456)": 0,
+      "Extended Public Liability (Adventure Activities) (PUB-2024-789123)": 0,
+      "Income Protection Insurance (Basic) (IP-2024-456789)": 0
+    },
+    "average_rating": 3.75,
+    "num_items_rated": 8
+  },
+  "final_package_text": "{\n    \"health_coverage\": {\n        \"description\": \"Combination of TK Krankenkasse public health insurance + Adventure travel health insurance + Emergency medical evacuation\",\n        \"providers\": {\n            \"tk_krankenkasse\": \"Existing public health insurance (cost included in previous \u20ac185/month, now supplemented)\",\n            \"adventure_travel_health\": {\n                \"policy_number\": \"ATH-2024-456123\",\n                \"cost_monthly\": 50,\n                \"cost_annual\": 600\n            },\n            \"emergency_medical_evacuation\": {\n                \"policy_number\": \"ME-2024-123789\",\n                \"cost_monthly\": 35,\n                \"cost_annual\": 420\n            }\n        },\n        \"total_health_monthly\": 85,\n        \"total_health_annual\": 1020,\n        \"covers_remote_locations\": true,\n        \"covers_glacier_activities\": true,\n        \"covers_mental_health\": \"Covered through TK Krankenkasse public insurance (basic coverage)\"\n    },\n    \"property_coverage\": {\n        \"description\": \"Enhanced equipment insurance for photography gear used in remote/hazardous locations\",\n        \"provider\": {\n            \"policy_number\": \"EQ-2024-456789\",\n            \"coverage_limit\": 30000,\n            \"cost_monthly\": 62,\n            \"cost_annual\": 744\n        },\n        \"total_property_monthly\": 62,\n        \"total_property_annual\": 744,\n        \"covers_remote_locations\": true,\n        \"covers_equipment_value\": 24000\n    },\n    \"travel_coverage\": {\n        \"description\": \"Search and rescue coverage for remote photography locations including Iceland glaciers\",\n        \"provider\": {\n            \"policy_number\": \"SR-2024-789456\",\n            \"cost_monthly\": 30,\n            \"cost_annual\": 360\n        },\n        \"total_travel_monthly\": 30,\n        \"total_travel_annual\": 360,\n        \"covers_remote_locations\": true,\n        \"covers_search_and_rescue\": true,\n        \"covers_glacier_hiking\": true\n    },\n    \"additional_services\": {\n        \"description\": \"Professional liability, professional indemnity, extended public liability, and income protection insurance\",\n        \"services\": [\n            {\n                \"name\": \"Professional Liability Insurance\",\n                \"policy_number\": \"PL-2024-789456\",\n                \"cost_monthly\": 45,\n                \"cost_annual\": 540\n            },\n            {\n                \"name\": \"Professional Indemnity\",\n                \"policy_number\": \"PI-2024-123456\",\n                \"cost_monthly\": 35,\n                \"cost_annual\": 420\n            },\n            {\n                \"name\": \"Extended Public Liability (Adventure Activities)\",\n                \"policy_number\": \"PUB-2024-789123\",\n                \"cost_monthly\": 40,\n                \"cost_annual\": 480\n            },\n            {\n                \"name\": \"Income Protection Insurance (Basic)\",\n                \"policy_number\": \"IP-2024-456789\",\n                \"cost_monthly\": 35,\n                \"cost_annual\": 420\n            }\n        ],\n        \"total_additional_monthly\": 155,\n        \"total_additional_annual\": 1860,\n        \"bundle_discount_monthly\": -18,\n        \"bundle_discount_annual\": -216\n    },\n    \"total_budget\": {\n        \"monthly_breakdown\": {\n            \"health_coverage\": 85,\n            \"property_coverage\": 62,\n            \"travel_coverage\": 30,\n            \"additional_services\": 155,\n            \"bundle_discount\": -18,\n            \"total_monthly\": 314\n        },\n        \"annual_breakdown\": {\n            \"health_coverage\": 1020,\n            \"property_coverage\": 744,\n            \"travel_coverage\": 360,\n            \"additional_services\": 1860,\n            \"bundle_discount\": -216,\n            \"total_annual\": 3768\n        },\n        \"previous_monthly_cost\": 185,\n        \"monthly_increase\": 129,\n        \"percentage_increase\": \"69.7%\"\n    }\n}"
+}

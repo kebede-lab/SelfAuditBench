@@ -1,0 +1,267 @@
+{
+  "$defs": {
+    "ClosedLoopCondition": {
+      "enum": [
+        "sidecar_recovery",
+        "inline_self_restriction"
+      ],
+      "title": "ClosedLoopCondition",
+      "type": "string"
+    },
+    "FailureType": {
+      "enum": [
+        "authentication_error",
+        "provider_503",
+        "timeout",
+        "empty_response",
+        "json_parse_error",
+        "enum_validation_error",
+        "permission_delta_error",
+        "schema_validation_error",
+        "unexpected_exception"
+      ],
+      "title": "FailureType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Inspectible recovery-actor or outcome-judge model call.",
+  "properties": {
+    "attempt_index": {
+      "minimum": 1,
+      "title": "Attempt Index",
+      "type": "integer"
+    },
+    "completion_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completion Tokens"
+    },
+    "completion_tokens_estimated": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completion Tokens Estimated"
+    },
+    "condition": {
+      "$ref": "#/$defs/ClosedLoopCondition"
+    },
+    "duration_seconds": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Seconds"
+    },
+    "error_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Message"
+    },
+    "estimated_cost_usd": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Estimated Cost Usd"
+    },
+    "failure_type": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FailureType"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model"
+    },
+    "prompt_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Tokens"
+    },
+    "prompt_tokens_estimated": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Tokens Estimated"
+    },
+    "provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider"
+    },
+    "raw_response_excerpt": {
+      "default": "",
+      "maxLength": 2000,
+      "title": "Raw Response Excerpt",
+      "type": "string"
+    },
+    "raw_response_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Response Sha256"
+    },
+    "repair_attempt": {
+      "default": false,
+      "title": "Repair Attempt",
+      "type": "boolean"
+    },
+    "role": {
+      "enum": [
+        "recovery_actor",
+        "outcome_judge"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "success": {
+      "default": false,
+      "title": "Success",
+      "type": "boolean"
+    },
+    "token_accounting": {
+      "default": "none",
+      "enum": [
+        "provider_usage",
+        "local_estimate",
+        "none"
+      ],
+      "title": "Token Accounting",
+      "type": "string"
+    },
+    "total_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Tokens"
+    },
+    "total_tokens_estimated": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Tokens Estimated"
+    },
+    "turn_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Turn Index"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "role",
+    "condition",
+    "attempt_index"
+  ],
+  "title": "ClosedLoopModelAttempt",
+  "type": "object"
+}

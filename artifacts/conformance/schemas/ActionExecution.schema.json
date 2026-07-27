@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "ActionProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "$ref": "#/$defs/ActionType"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "capability": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capability"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "irreversible": {
+          "default": false,
+          "title": "Irreversible",
+          "type": "boolean"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "public"
+        },
+        "source_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_type"
+      ],
+      "title": "ActionProposal",
+      "type": "object"
+    },
+    "ActionType": {
+      "enum": [
+        "none",
+        "tool_call",
+        "environment_query",
+        "disclosure",
+        "memory_write",
+        "commit",
+        "refuse"
+      ],
+      "title": "ActionType",
+      "type": "string"
+    },
+    "BrokerOutcome": {
+      "enum": [
+        "allow",
+        "block_and_replan",
+        "pause",
+        "refuse"
+      ],
+      "title": "BrokerOutcome",
+      "type": "string"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Action-sink receipt proving whether a proposed transition was enacted.",
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/ActionProposal"
+    },
+    "broker_outcome": {
+      "$ref": "#/$defs/BrokerOutcome"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "executed": {
+      "title": "Executed",
+      "type": "boolean"
+    },
+    "origin_sequence": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Origin Sequence"
+    },
+    "permission_revision": {
+      "minimum": 0,
+      "title": "Permission Revision",
+      "type": "integer"
+    },
+    "result": {
+      "additionalProperties": true,
+      "title": "Result",
+      "type": "object"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "recorded",
+        "actor"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "turn_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Turn Index"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "event_id",
+    "source",
+    "action",
+    "broker_outcome",
+    "executed",
+    "permission_revision"
+  ],
+  "title": "ActionExecution",
+  "type": "object"
+}

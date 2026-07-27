@@ -1,0 +1,405 @@
+{
+  "$defs": {
+    "ActionProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "$ref": "#/$defs/ActionType"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "capability": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capability"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "irreversible": {
+          "default": false,
+          "title": "Irreversible",
+          "type": "boolean"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "public"
+        },
+        "source_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_type"
+      ],
+      "title": "ActionProposal",
+      "type": "object"
+    },
+    "ActionType": {
+      "enum": [
+        "none",
+        "tool_call",
+        "environment_query",
+        "disclosure",
+        "memory_write",
+        "commit",
+        "refuse"
+      ],
+      "title": "ActionType",
+      "type": "string"
+    },
+    "AuditEmissionMode": {
+      "enum": [
+        "none",
+        "sidecar",
+        "inline",
+        "external"
+      ],
+      "title": "AuditEmissionMode",
+      "type": "string"
+    },
+    "AuditRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/Checkpoint"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "emission_mode": {
+          "$ref": "#/$defs/AuditEmissionMode"
+        },
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "intended_action_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Intended Action Ref"
+        },
+        "intervention": {
+          "$ref": "#/$defs/Intervention"
+        },
+        "permission_delta": {
+          "$ref": "#/$defs/PermissionDelta"
+        },
+        "rationale": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "raw_response_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response Ref"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/RiskLevel"
+        },
+        "risk_types": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RiskType"
+          },
+          "title": "Risk Types",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "checkpoint",
+        "actor_id",
+        "risk_level",
+        "confidence",
+        "intervention",
+        "rationale",
+        "emission_mode"
+      ],
+      "title": "AuditRecord",
+      "type": "object"
+    },
+    "CapabilityGrant": {
+      "additionalProperties": false,
+      "description": "One namespaced permission and its mechanically comparable bounds.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.:/-]+$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "fields": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "max_sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "operations": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
+        "remaining_calls": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Calls"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "resources": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "CapabilityGrant",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "enum": [
+        "pre_plan",
+        "post_memory",
+        "post_observation",
+        "pre_environment_query",
+        "pre_disclosure",
+        "pre_tool",
+        "pre_commit",
+        "pre_memory_write"
+      ],
+      "title": "Checkpoint",
+      "type": "string"
+    },
+    "Intervention": {
+      "enum": [
+        "continue",
+        "sanitize",
+        "reverify",
+        "ask_user",
+        "downgrade",
+        "quarantine",
+        "pause",
+        "refuse"
+      ],
+      "title": "Intervention",
+      "type": "string"
+    },
+    "PermissionDelta": {
+      "additionalProperties": false,
+      "description": "A proposed monotonic permission reduction.",
+      "properties": {
+        "disclosure_ceiling": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Sensitivity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "narrow": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Narrow",
+          "type": "object"
+        },
+        "quarantine_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantine Sources",
+          "type": "array"
+        },
+        "remove": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Remove",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionDelta",
+      "type": "object"
+    },
+    "RiskLevel": {
+      "enum": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "RiskType": {
+      "enum": [
+        "privacy",
+        "prompt_injection",
+        "memory_poisoning",
+        "overprivilege",
+        "external_pressure",
+        "stale_state",
+        "irreversible_action",
+        "policy_conflict",
+        "unknown"
+      ],
+      "title": "RiskType",
+      "type": "string"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/ActionProposal"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditRecord"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "audit"
+  ],
+  "title": "AuditEnvelope",
+  "type": "object"
+}

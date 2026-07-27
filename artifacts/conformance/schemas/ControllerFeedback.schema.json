@@ -1,0 +1,194 @@
+{
+  "$defs": {
+    "BrokerOutcome": {
+      "enum": [
+        "allow",
+        "block_and_replan",
+        "pause",
+        "refuse"
+      ],
+      "title": "BrokerOutcome",
+      "type": "string"
+    },
+    "CapabilityGrant": {
+      "additionalProperties": false,
+      "description": "One namespaced permission and its mechanically comparable bounds.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.:/-]+$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "fields": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "max_sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "operations": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
+        "remaining_calls": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Calls"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "resources": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "CapabilityGrant",
+      "type": "object"
+    },
+    "PermissionState": {
+      "additionalProperties": false,
+      "description": "Current enforceable permissions for one task execution.",
+      "properties": {
+        "disclosure_ceiling": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "grants": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Grants",
+          "type": "object"
+        },
+        "quarantined_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantined Sources",
+          "type": "array"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionState",
+      "type": "object"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Controller observation returned to the actor before its next proposal.",
+  "properties": {
+    "action_result": {
+      "additionalProperties": true,
+      "title": "Action Result",
+      "type": "object"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/BrokerOutcome"
+    },
+    "permission_after": {
+      "$ref": "#/$defs/PermissionState"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "turn_index": {
+      "minimum": 0,
+      "title": "Turn Index",
+      "type": "integer"
+    },
+    "violations": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Violations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "event_id",
+    "turn_index",
+    "outcome",
+    "reason",
+    "permission_after"
+  ],
+  "title": "ControllerFeedback",
+  "type": "object"
+}

@@ -1,0 +1,268 @@
+{
+  "$defs": {
+    "AuditEmissionMode": {
+      "enum": [
+        "none",
+        "sidecar",
+        "inline",
+        "external"
+      ],
+      "title": "AuditEmissionMode",
+      "type": "string"
+    },
+    "ClosedLoopCondition": {
+      "enum": [
+        "sidecar_recovery",
+        "inline_self_restriction"
+      ],
+      "title": "ClosedLoopCondition",
+      "type": "string"
+    },
+    "ModelProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "api_key_env": {
+          "default": "OPENAI_API_KEY",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "title": "Api Key Env",
+          "type": "string"
+        },
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Url"
+        },
+        "concise_rationale_words": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 80,
+          "title": "Concise Rationale Words"
+        },
+        "input_cost_per_million_tokens_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Cost Per Million Tokens Usd"
+        },
+        "max_retries": {
+          "default": 2,
+          "minimum": 0,
+          "title": "Max Retries",
+          "type": "integer"
+        },
+        "max_tokens": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 900,
+          "title": "Max Tokens"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "output_cost_per_million_tokens_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Cost Per Million Tokens Usd"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "temperature": {
+          "anyOf": [
+            {
+              "maximum": 2,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0.0,
+          "title": "Temperature"
+        },
+        "thinking_mode": {
+          "default": "default",
+          "enum": [
+            "default",
+            "disabled",
+            "enabled"
+          ],
+          "title": "Thinking Mode",
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "default": 60.0,
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "provider",
+        "model"
+      ],
+      "title": "ModelProfile",
+      "type": "object"
+    },
+    "StrategyId": {
+      "enum": [
+        "no_audit",
+        "self_audit_log_only",
+        "external_auditor",
+        "pretool_guardrail",
+        "fixed_policy",
+        "self_audit_broker",
+        "combined_monitor_broker"
+      ],
+      "title": "StrategyId",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Configuration for normalized enacted recovery experiments.",
+  "properties": {
+    "audit_mode": {
+      "$ref": "#/$defs/AuditEmissionMode"
+    },
+    "condition": {
+      "$ref": "#/$defs/ClosedLoopCondition"
+    },
+    "dataset": {
+      "format": "path",
+      "title": "Dataset",
+      "type": "string"
+    },
+    "driver_id": {
+      "default": "normalized_action_sink",
+      "title": "Driver Id",
+      "type": "string"
+    },
+    "fail_closed": {
+      "default": true,
+      "title": "Fail Closed",
+      "type": "boolean"
+    },
+    "max_recovery_steps": {
+      "default": 6,
+      "maximum": 50,
+      "minimum": 1,
+      "title": "Max Recovery Steps",
+      "type": "integer"
+    },
+    "max_replans": {
+      "default": 3,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Max Replans",
+      "type": "integer"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observer_model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "outcome_judge_model": {
+      "$ref": "#/$defs/ModelProfile"
+    },
+    "output_root": {
+      "default": "artifacts/runs",
+      "format": "path",
+      "title": "Output Root",
+      "type": "string"
+    },
+    "random_seed": {
+      "default": 0,
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "recovery_model": {
+      "$ref": "#/$defs/ModelProfile"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strategy": {
+      "$ref": "#/$defs/StrategyId"
+    }
+  },
+  "required": [
+    "run_id",
+    "strategy",
+    "audit_mode",
+    "dataset",
+    "condition",
+    "recovery_model",
+    "outcome_judge_model"
+  ],
+  "title": "ClosedLoopConfig",
+  "type": "object"
+}

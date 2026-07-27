@@ -1,0 +1,599 @@
+{
+  "$defs": {
+    "ActionProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "$ref": "#/$defs/ActionType"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "capability": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capability"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "irreversible": {
+          "default": false,
+          "title": "Irreversible",
+          "type": "boolean"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "public"
+        },
+        "source_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_type"
+      ],
+      "title": "ActionProposal",
+      "type": "object"
+    },
+    "ActionType": {
+      "enum": [
+        "none",
+        "tool_call",
+        "environment_query",
+        "disclosure",
+        "memory_write",
+        "commit",
+        "refuse"
+      ],
+      "title": "ActionType",
+      "type": "string"
+    },
+    "CapabilityGrant": {
+      "additionalProperties": false,
+      "description": "One namespaced permission and its mechanically comparable bounds.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.:/-]+$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "fields": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "max_sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "operations": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
+        "remaining_calls": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Calls"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "resources": {
+          "default": [
+            "*"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "CapabilityGrant",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "enum": [
+        "pre_plan",
+        "post_memory",
+        "post_observation",
+        "post_message",
+        "pre_environment_query",
+        "pre_disclosure",
+        "pre_tool",
+        "pre_commit",
+        "pre_memory_write"
+      ],
+      "title": "Checkpoint",
+      "type": "string"
+    },
+    "EventKind": {
+      "enum": [
+        "task_received",
+        "plan_proposal",
+        "memory_read",
+        "observation",
+        "message",
+        "environment_query",
+        "tool_proposal",
+        "disclosure_proposal",
+        "commit_proposal",
+        "memory_write_proposal",
+        "policy_change",
+        "action_result",
+        "audit_result",
+        "execution_failure"
+      ],
+      "title": "EventKind",
+      "type": "string"
+    },
+    "Intervention": {
+      "enum": [
+        "continue",
+        "sanitize",
+        "reverify",
+        "ask_user",
+        "downgrade",
+        "quarantine",
+        "pause",
+        "refuse"
+      ],
+      "title": "Intervention",
+      "type": "string"
+    },
+    "LabelProvenance": {
+      "description": "Evidence class supporting a scenario label.",
+      "enum": [
+        "unlabeled",
+        "weak_import",
+        "source_curated",
+        "synthetic_fixture",
+        "human_calibration",
+        "human_adjudicated"
+      ],
+      "title": "LabelProvenance",
+      "type": "string"
+    },
+    "PermissionDelta": {
+      "additionalProperties": false,
+      "description": "A proposed monotonic permission reduction.",
+      "properties": {
+        "disclosure_ceiling": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Sensitivity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "narrow": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Narrow",
+          "type": "object"
+        },
+        "quarantine_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantine Sources",
+          "type": "array"
+        },
+        "remove": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Remove",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionDelta",
+      "type": "object"
+    },
+    "PermissionState": {
+      "additionalProperties": false,
+      "description": "Current enforceable permissions for one task execution.",
+      "properties": {
+        "disclosure_ceiling": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "restricted"
+        },
+        "grants": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CapabilityGrant"
+          },
+          "title": "Grants",
+          "type": "object"
+        },
+        "quarantined_sources": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Quarantined Sources",
+          "type": "array"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "title": "PermissionState",
+      "type": "object"
+    },
+    "Provenance": {
+      "enum": [
+        "user",
+        "agent",
+        "tool",
+        "memory",
+        "environment",
+        "external_agent",
+        "controller",
+        "unknown"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "ScenarioLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_interventions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Intervention"
+          },
+          "title": "Accepted Interventions",
+          "type": "array"
+        },
+        "first_risk_sufficient_event": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Risk Sufficient Event"
+        },
+        "harm_boundary_event": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Harm Boundary Event"
+        },
+        "minimal_permission_deltas": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PermissionDelta"
+          },
+          "title": "Minimal Permission Deltas",
+          "type": "array"
+        },
+        "risky": {
+          "title": "Risky",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "utility_expectation": {
+          "default": "",
+          "title": "Utility Expectation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "risky"
+      ],
+      "title": "ScenarioLabel",
+      "type": "object"
+    },
+    "Sensitivity": {
+      "enum": [
+        "public",
+        "internal",
+        "personal",
+        "sensitive",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    },
+    "TrajectoryEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Checkpoint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_kind": {
+          "$ref": "#/$defs/EventKind"
+        },
+        "permission_revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Permission Revision",
+          "type": "integer"
+        },
+        "proposed_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ActionProposal"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "raw_artifact_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Artifact Ref"
+        },
+        "reversible": {
+          "default": true,
+          "title": "Reversible",
+          "type": "boolean"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "public"
+        },
+        "sequence": {
+          "minimum": 0,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "source": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "visible_payload": {
+          "additionalProperties": true,
+          "title": "Visible Payload",
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_id",
+        "scenario_id",
+        "sequence",
+        "event_kind",
+        "source"
+      ],
+      "title": "TrajectoryEvent",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "events": {
+      "items": {
+        "$ref": "#/$defs/TrajectoryEvent"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "initial_permissions": {
+      "$ref": "#/$defs/PermissionState"
+    },
+    "label": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScenarioLabel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "label_evidence_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Label Evidence Sha256"
+    },
+    "label_provenance": {
+      "$ref": "#/$defs/LabelProvenance",
+      "default": "unlabeled"
+    },
+    "pair_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pair Id"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_dataset": {
+      "title": "Source Dataset",
+      "type": "string"
+    },
+    "source_ref": {
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "tags": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "weak_label": {
+      "default": false,
+      "title": "Weak Label",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "source_dataset",
+    "source_ref",
+    "events"
+  ],
+  "title": "Scenario",
+  "type": "object"
+}

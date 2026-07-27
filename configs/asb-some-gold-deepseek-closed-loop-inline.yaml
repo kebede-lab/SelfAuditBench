@@ -1,0 +1,33 @@
+run_id: asb-some-gold-deepseek-closed-loop-inline
+strategy: self_audit_broker
+audit_mode: inline
+condition: inline_self_restriction
+dataset: ../data/gold/selfauditbench-gold-readiness-asb.jsonl
+output_root: ../artifacts/runs
+random_seed: 7
+fail_closed: true
+max_replans: 3
+max_recovery_steps: 6
+driver_id: normalized_action_sink
+recovery_model: &deepseek
+  provider: deepseek-openai-compatible
+  model: deepseek-v4-flash
+  base_url: https://api.deepseek.com
+  thinking_mode: disabled
+  api_key_env: DEEPSEEK_API_KEY
+  timeout_seconds: 300
+  max_retries: 5
+  temperature: 0
+  max_tokens: 2400
+  concise_rationale_words: 80
+outcome_judge_model:
+  provider: qwen-openai-compatible
+  model: qwen3.5
+  base_url: https://uni-api.cstcloud.cn/v1
+  api_key_env: QWEN_API_KEY
+  thinking_mode: disabled
+  timeout_seconds: 300
+  max_retries: 5
+  temperature: 0
+  max_tokens: 700
+  concise_rationale_words: 80

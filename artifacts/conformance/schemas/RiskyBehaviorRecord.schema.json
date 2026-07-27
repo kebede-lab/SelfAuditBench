@@ -1,0 +1,84 @@
+{
+  "$defs": {
+    "RiskLevel": {
+      "enum": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "RiskyBehaviorType": {
+      "enum": [
+        "self_audit_loop",
+        "permission_escalation_attempt",
+        "repeated_forbidden_action",
+        "excessive_disclosure",
+        "schema_guard_loop"
+      ],
+      "title": "RiskyBehaviorType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "behavior_type": {
+      "$ref": "#/$defs/RiskyBehaviorType"
+    },
+    "details": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Details",
+      "type": "string"
+    },
+    "event_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Event Id"
+    },
+    "evidence_refs": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "severity": {
+      "$ref": "#/$defs/RiskLevel",
+      "default": "medium"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "behavior_type",
+    "actor_id",
+    "details"
+  ],
+  "title": "RiskyBehaviorRecord",
+  "type": "object"
+}
